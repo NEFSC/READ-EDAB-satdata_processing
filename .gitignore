@@ -1,2 +1,7 @@
 
-/python/.ipynb_checkpoints
+*.nc
+*.pptx
+.DS*
+.DS_Store
+
+.ipynb_checkpoints/
