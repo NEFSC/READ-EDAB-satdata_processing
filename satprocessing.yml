@@ -17,6 +17,7 @@ dependencies:
   - earthaccess
   - xarray-regrid
   - cmocean
+  - xesmf
   - pip  # Enables mixed pip install
   - pip:
       - erddapy
