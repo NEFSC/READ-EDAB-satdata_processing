@@ -1,0 +1,5 @@
+copernicusmarine==2.2.1
+earthaccess==0.14.0
+erddapy==2.2.4
+gsutil==5.35
+xarray-regrid==0.4.1

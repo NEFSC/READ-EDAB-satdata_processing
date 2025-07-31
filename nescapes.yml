@@ -1,0 +1,23 @@
+name: satprocessing
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - numpy=2.1.3
+  - scipy
+  - pandas
+  - xarray
+  - netCDF4
+  - h5py
+  - dask
+  - matplotlib
+  - cartopy
+  - hvplot
+  - copernicusmarine
+  - earthaccess
+  - xarray-regrid
+  - cmocean
+  - xesmf
+  - pip  # Enables mixed pip install
+  - pip:
+      - erddapy
