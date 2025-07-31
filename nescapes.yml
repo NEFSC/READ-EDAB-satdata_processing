@@ -18,6 +18,7 @@ dependencies:
   - xarray-regrid
   - cmocean
   - xesmf
+  - gsw
   - pip  # Enables mixed pip install
   - pip:
       - erddapy
