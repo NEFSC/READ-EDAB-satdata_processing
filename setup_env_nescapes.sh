@@ -1,8 +1,8 @@
 #!/bin/bash
 
-ENV_NAME="satprocessing"
-YML_PATH="./satprocessing.yml"
-REQUIREMENTS="./requirements.txt"
+ENV_NAME="nescapes"
+YML_PATH="./nescapes.yml"
+REQUIREMENTS="./requirements_nescapes.txt"
 
 echo "🔧 Creating Conda environment: $ENV_NAME"
 
