@@ -8,6 +8,7 @@ dependencies:
   - scipy
   - pandas
   - xarray
+  - xarray-regrid
   - netCDF4
   - h5py
   - dask
@@ -20,6 +21,7 @@ dependencies:
   - cmocean
   - xesmf
   - ipykernel
-  - pip  # Enables mixed pip install
+  - erddapy
+    - pip  # Enables mixed pip install
   - pip:
-      - erddapy
+      - gsutil
