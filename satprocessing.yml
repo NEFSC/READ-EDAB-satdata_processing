@@ -23,6 +23,7 @@ dependencies:
   - ipykernel
   - erddapy
   - openpyxl
+  - geopandas
     - pip  # Enables mixed pip install
   - pip:
       - gsutil
