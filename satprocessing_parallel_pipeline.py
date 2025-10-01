@@ -16,7 +16,7 @@ sys.path.insert(0, str(project_root))
 from utilities.bootstrap.environment import bootstrap_environment
 env = bootstrap_environment(verbose=False)
 
-from utilities.file_utilities import get_prod_files
+from utilities.product_utilities import get_prod_files
 from utilities.date_utilities import get_source_file_dates
 
 import time
