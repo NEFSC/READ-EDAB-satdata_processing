@@ -17,7 +17,6 @@ dependencies:
   - hvplot
   - copernicusmarine
   - earthaccess
-  - xarray-regrid
   - cmocean
   - xesmf
   - ipykernel
