@@ -36,7 +36,10 @@ def parse_args():
     parser.add_argument("--climatology_range", type=str, help="The year range for the climatology (e.g. 1991,2020)")
     parser.add_argument("--parallel_runs", type=int, default=1, help="The number of stats jobs to run in parallel")
     parser.add_argument("--logfile", type=str, help="Optional path to log file for this run")  
+    parser.add_argument("--verbose", action="store_true", help="Print detailed progress logs")
+    parser.add_argument("--debug", action="store_true", help="Enter debug mode")
     args = parser.parse_args()
+
 
     if args.daterange:
         try:
@@ -52,12 +55,14 @@ if __name__ == "__main__":
     run_stats_pipeline(prods=args.prods,
                        periods=args.periods,
                        dataset=args.dataset,
-                       version=args.version,
+                       dataset_version=args.version,
                        subset=args.subset,
                        daterange=args.daterange,
                        climatology_range=args.climatology_range,
                        parallel_runs=args.parallel_runs,
-                       logfile=args.logfile)
+                       logfile=args.logfile,
+                       verbose=args.verbose,
+                       debug=args.debug)
 
    # ==========================================
     # 💻 Example terminal window commands:
