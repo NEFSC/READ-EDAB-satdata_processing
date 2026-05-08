@@ -34,7 +34,7 @@ def parse_args():
     parser.add_argument("--subset", type=str, required=False, help="Name of the region (e.g. NES, NWA) to subset the data to")
     parser.add_argument("--daterange", type=str, help="Flexible date input: year(s), date(s), or range")
     parser.add_argument("--climatology_range", type=str, help="The year range for the climatology (e.g. 1991,2020)")
-    parser.add_argument("--parallel_runs", type=int, help="The number of stats jobs to run in parallel")
+    parser.add_argument("--parallel_runs", type=int, default=1, help="The number of stats jobs to run in parallel")
     parser.add_argument("--logfile", type=str, help="Optional path to log file for this run")  
     args = parser.parse_args()
 
