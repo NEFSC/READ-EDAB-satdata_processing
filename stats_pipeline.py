@@ -11,7 +11,7 @@ sys.path.insert(0, str(project_root))
 from utilities.bootstrap.environment import bootstrap_environment
 env = bootstrap_environment(verbose=False)
 
-from utilities.statanom_utilities import run_stats_pipeline
+from utilities.src.utilities.statanom_utilities import run_stats_pipeline
 
 def flatten_dates(d):
     # Flatten nested lists like [[1997]] → [1997]
