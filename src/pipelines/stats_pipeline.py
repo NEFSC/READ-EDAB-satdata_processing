@@ -11,7 +11,7 @@ sys.path.insert(0, str(project_root))
 from utilities.bootstrap.environment import bootstrap_environment
 env = bootstrap_environment(verbose=False)
 
-from utilities.statanom_utilities import run_stats_pipeline
+from utilities.src.utilities.statanom_utilities import run_stats_pipeline
 
 def flatten_dates(d):
     # Flatten nested lists like [[1997]] → [1997]
@@ -69,7 +69,7 @@ if __name__ == "__main__":
     # ==========================================
     #
     # 1. Standard Run:
-    # python3 run_stats.py --prods SST --periods W M A --subset NWA --parallel_runs 4
+    # python3 run_stats_pipeline.py --prods SST --periods W M A --subset NWA --parallel_runs 4
     #
     # 2. Multi-Product Run with a Logfile:
-    # python3 run_stats.py --prods SST CHL PSC --periods MONTH --subset NES --logfile /path/to/log.txt
+    # python3 run_stats_pipeline.py --prods SST CHL PSC --periods MONTH --subset NES --logfile /path/to/log.txt
