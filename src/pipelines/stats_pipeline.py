@@ -69,7 +69,7 @@ if __name__ == "__main__":
     # ==========================================
     #
     # 1. Standard Run:
-    # python3 run_stats.py --prods SST --periods W M A --subset NWA --parallel_runs 4
+    # python3 run_stats_pipeline.py --prods SST --periods W M A --subset NWA --parallel_runs 4
     #
     # 2. Multi-Product Run with a Logfile:
-    # python3 run_stats.py --prods SST CHL PSC --periods MONTH --subset NES --logfile /path/to/log.txt
+    # python3 run_stats_pipeline.py --prods SST CHL PSC --periods MONTH --subset NES --logfile /path/to/log.txt

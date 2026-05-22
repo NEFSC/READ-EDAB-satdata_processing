@@ -23,6 +23,10 @@ dependencies:
   - erddapy
   - openpyxl
   - geopandas
+  - imageio-ffmpeg
+  - imageio
+  - ghp-import
+  - jupyter-book=1.*
     - pip  # Enables mixed pip install
   - pip:
       - gsutil
