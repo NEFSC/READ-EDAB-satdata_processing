@@ -1,4 +1,4 @@
-# run_psc.py
+# run_pp.py
 import argparse
 import sys
 from pathlib import Path
@@ -11,7 +11,7 @@ sys.path.insert(0, str(project_root))
 from utilities.bootstrap.environment import bootstrap_environment
 env = bootstrap_environment(verbose=False)
 
-from utilities.calc_phytosizeclass import run_psc_pipeline
+from utilities.src.utilities.calc_primprod import run_pp_pipeline
 
 def flatten_dates(d):
     # Flatten nested lists like [[1997]] → [1997]
@@ -29,14 +29,11 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Run phytoplankton size class pipeline")
     parser.add_argument("--chl_dataset", type=str, required=False, help="Name of CHL dataset")
     parser.add_argument("--sst_dataset", type=str, required=False, help="Name of SST dataset")
+    parser.add_argument("--par_dataset", type=str, required=False, help="Name of PAR dataset")
     parser.add_argument("--subset", type=str, required=False, help="Name of the region (e.g. NES, NWA) to subset the data to")
     parser.add_argument("--daterange", type=str, help="Flexible date input: year(s), date(s), or range")
     parser.add_argument("--logfile", type=str, help="Optional path to log file for this run")  # ← Add this line
     args = parser.parse_args()
-
-    for key, val in vars(args).items():
-        if isinstance(val, str) and val.strip().lower() == "none":
-            setattr(args, key, None)
 
     if args.daterange:
         try:
@@ -49,7 +46,7 @@ def parse_args():
 
 if __name__ == "__main__":
     args = parse_args()
-    run_psc_pipeline(chl_dataset=args.chl_dataset, sst_dataset=args.sst_dataset, subset=args.subset, daterange=args.daterange, logfile=args.logfile)
+    run_pp_pipeline(chl_dataset=args.chl_dataset, sst_dataset=args.sst_dataset, par_dataset=args.par_dataset, subset=args.subset, daterange=args.daterange, logfile=args.logfile)
 
     # Example terminal window command
     # python3 run_pp_pipeline.py --sst_dataset CORALSST --daterange 1998
