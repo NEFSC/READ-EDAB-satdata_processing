@@ -5,7 +5,8 @@ from pathlib import Path
 import ast
 
 # Add project root to sys.path
-project_root = Path(__file__).resolve().parent.parent
+project_root = Path(__file__).resolve().parent.parent.parent.parent
+print(f"Project Root = {project_root}")
 sys.path.insert(0, str(project_root))
 
 from utilities.bootstrap.environment import bootstrap_environment
@@ -69,7 +70,7 @@ if __name__ == "__main__":
     # ==========================================
     #
     # 1. Standard Run:
-    # python3 run_stats_pipeline.py --prods SST --periods W M A --subset NWA --parallel_runs 4
+    # python3 stats_pipeline.py --prods SST --periods W M A --subset NWA --parallel_runs 4
     #
     # 2. Multi-Product Run with a Logfile:
-    # python3 run_stats_pipeline.py --prods SST CHL PSC --periods MONTH --subset NES --logfile /path/to/log.txt
+    # python3 stats_pipeline.py --prods SST CHL PSC --periods MONTH --subset NES --logfile /path/to/log.txt
