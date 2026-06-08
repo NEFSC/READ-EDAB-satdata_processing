@@ -27,6 +27,9 @@ dependencies:
   - imageio
   - ghp-import
   - jupyter-book=1.*
+  - pprint
+  - gc
     - pip  # Enables mixed pip install
   - pip:
       - gsutil
+      - resource
