@@ -19,7 +19,7 @@ while getopts "n:f:h" opt; do
       exit 0 
       ;;
     *) 
-      echo "Usage: $0 [-n env_name] [-f yml_path]" >&2
+      echo "Usage: $0 [-n env_name] [-f yml_path] [-o]" >&2
       exit 1 
       ;;
   esac
