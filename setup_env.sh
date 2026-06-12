@@ -10,10 +10,12 @@ while getopts "n:f:h" opt; do
   case $opt in
     n) ENV_NAME="$OPTARG" ;;
     f) YML_PATH="$OPTARG" ;;
+    o) OVERWRITE=true ;;
     h) 
       echo "Usage: $0 [-n env_name] [-f yml_path]"
       echo "  -n  Name of the Conda environment (default: satprocessing)"
       echo "  -f  Path to the environment YAML file (default: ./satprocessing.yml)"
+      echo "  -o  Overwrite: completely remove the existing environment and start fresh"
       exit 0 
       ;;
     *) 
@@ -25,6 +27,10 @@ done
 
 echo "🔧 Setting up Conda environment: $ENV_NAME"
 echo "📄 Using environment file: $YML_PATH"
+
+if [ "$OVERWRITE" = true ]; then
+    echo "⚠️  Overwrite mode activated. The environment will be completely rebuilt."
+fi
 
 # 3. Verify the YAML exists
 if [ ! -f "$YML_PATH" ]; then
@@ -41,15 +47,26 @@ fi
 # 5. Check if the environment already exists and catch installation errors
 # This extracts the first column of the env list and checks for an exact match
 if conda info --envs | awk '{print $1}' | grep -Fxq "$ENV_NAME"; then
-    echo "🔄 Environment '$ENV_NAME' found! Syncing packages with $YML_PATH..."
-    echo "📋 Calculating differences... Check the transaction report below for added/removed packages:"
+    if [ "$OVERWRITE" = true ]; then
+        echo "🗑️  Removing existing environment '$ENV_NAME' for a fresh start..."
+        conda env remove --name "$ENV_NAME" -y
+        
+        echo "📦 Creating '$ENV_NAME' from scratch..."
+        if ! conda env create --name "$ENV_NAME" --file "$YML_PATH"; then
+            echo "❌ ERROR: Conda failed to resolve or download packages. Setup is incomplete."
+            exit 1
+        fi
+    else
+        echo "🔄 Environment '$ENV_NAME' found! Syncing packages with $YML_PATH..."
+        echo "📋 Calculating differences... Check the transaction report below for added/removed packages:"
     
-    # If the update fails, print the custom error and exit
-    # The --prune flag ensures the environment matches the YAML exactly (removing extra packages)
-    if ! conda env update --name "$ENV_NAME" --file "$YML_PATH" --prune; then
-        echo "❌ ERROR: Conda failed to update the packages. Setup is incomplete."
-        exit 1
-    fi   
+        # If the update fails, print the custom error and exit
+        # The --prune flag ensures the environment matches the YAML exactly (removing extra packages)
+        if ! conda env update --name "$ENV_NAME" --file "$YML_PATH" --prune; then
+            echo "❌ ERROR: Conda failed to update the packages. Setup is incomplete."
+            exit 1
+        fi  
+    fi 
 else
     echo "📦 Environment '$ENV_NAME' not found. Creating it from scratch..."
 # If the creation fails, print the custom error and exit
@@ -87,6 +104,9 @@ fi
 
 # To run with the default environment and file, simply execute:
 # ./setup_env.sh
+
+# To replace/overwrite an exisiting environement
+# ./setup_env.sh -o
 
 # To change the environment name
 # ./setup_env.sh -n my_new_env
