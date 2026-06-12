@@ -28,7 +28,6 @@ dependencies:
   - ghp-import
   - jupyter-book>=1.0
   - pprint
-  - gc
   - pip  # Enables mixed pip install
   - pip:
       - gsutil
