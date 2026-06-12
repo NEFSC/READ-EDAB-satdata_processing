@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e # Exit immediately if any command fails
 
+# 1. Set default values
 ENV_NAME="satprocessing"
 YML_PATH="./satprocessing.yml"
 
@@ -23,37 +24,47 @@ while getopts "n:f:h" opt; do
 done
 
 echo "🔧 Setting up Conda environment: $ENV_NAME"
+echo "📄 Using environment file: $YML_PATH"
 
-# 1. Verify the YAML exists
+# 3. Verify the YAML exists
 if [ ! -f "$YML_PATH" ]; then
-  echo "❌ Environment file not found: $YML_PATH"
+  echo "❌ Error: Environment file not found: $YML_PATH. Setup is incomplete."
   exit 1
 fi
 
-# 2. Verify Conda is installed and accessible
+# 4. Verify Conda is installed and accessible
 if ! command -v conda &> /dev/null; then
     echo "❌ Conda is not installed or not in your system PATH."
     exit 1
 fi
 
-# 3. Check if the environment already exists
+# 5. Check if the environment already exists and catch installation errors
 # This extracts the first column of the env list and checks for an exact match
 if conda info --envs | awk '{print $1}' | grep -Fxq "$ENV_NAME"; then
     echo "🔄 Environment '$ENV_NAME' found! Syncing packages with $YML_PATH..."
     echo "📋 Calculating differences... Check the transaction report below for added/removed packages:"
+    
+    # If the update fails, print the custom error and exit
     # The --prune flag ensures the environment matches the YAML exactly (removing extra packages)
-    conda env update --name "$ENV_NAME" --file "$YML_PATH" --prune
+    if ! conda env update --name "$ENV_NAME" --file "$YML_PATH" --prune; then
+        echo "❌ ERROR: Conda failed to update the packages. Setup is incomplete."
+        exit 1
+    fi   
 else
     echo "📦 Environment '$ENV_NAME' not found. Creating it from scratch..."
-    conda env create --name "$ENV_NAME" --file "$YML_PATH"
+# If the creation fails, print the custom error and exit
+    if ! conda env create --name "$ENV_NAME" --file "$YML_PATH"; then
+        echo "❌ ERROR: Conda failed to resolve or download packages. Setup is incomplete."
+        exit 1
+    fi
 fi
 
-# 4. Safely test the environment without activating the shell
+# 6. Safely test the environment without activating the shell
 echo "🧪 Testing environment setup..."
 if conda run -n "$ENV_NAME" python -c "import numpy; print('✅ NumPy version:', numpy.__version__)"; then
     echo "🎉 Setup complete! To start using it, run: conda activate $ENV_NAME"
 else
-    echo "❌ NumPy not found or environment test failed!"
+    echo "❌ ERROR: NumPy not found or environment test failed!"
     exit 1
 fi
 
@@ -66,11 +77,13 @@ mkdir -p "$LOG_DIR" # Create the directory if it doesn't exist
 TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
 EXPORT_FILE="${LOG_DIR}/${ENV_NAME}_${TIMESTAMP}.yml"
 
-# Export the exact environment details
-conda env export -n "$ENV_NAME" > "$EXPORT_FILE"
-
-echo "✅ Environment state saved to: $EXPORT_FILE"
-echo "🎉 Setup complete! To start using the environment, run: conda activate $ENV_NAME"
+# 8. Export the exact environment details
+if conda env export -n "$ENV_NAME" > "$EXPORT_FILE"; then
+    echo "✅ Environment state saved to: $EXPORT_FILE"
+    echo "🎉 Setup complete! To start using the environment, run: conda activate $ENV_NAME"
+else
+    echo "⚠ WARNING: Environment was created, but failed to save the log file to $EXPORT_FILE."
+fi
 
 # To run with the default environment and file, simply execute:
 # ./setup_env.sh
