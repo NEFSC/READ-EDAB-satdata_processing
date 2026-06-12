@@ -13,7 +13,7 @@ while getopts "n:f:oh" opt; do
     f) YML_PATH="$OPTARG" ;;
     o) OVERWRITE=true ;;
     h) 
-      echo "Usage: $0 [-n env_name] [-f yml_path]"
+      echo "Usage: $0 [-n env_name] [-f yml_path] [-o]"
       echo "  -n  Name of the Conda environment (default: satprocessing)"
       echo "  -f  Path to the environment YAML file (default: ./satprocessing.yml)"
       echo "  -o  Overwrite: completely remove the existing environment and start fresh"
