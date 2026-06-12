@@ -4,9 +4,10 @@ set -e # Exit immediately if any command fails
 # 1. Set default values
 ENV_NAME="satprocessing"
 YML_PATH="./satprocessing.yml"
+OVERWRITE=false
 
 # 2. Parse command-line flags (-n for name, -f for file, -h for help)
-while getopts "n:f:h" opt; do
+while getopts "n:f:oh" opt; do
   case $opt in
     n) ENV_NAME="$OPTARG" ;;
     f) YML_PATH="$OPTARG" ;;
