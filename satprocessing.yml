@@ -19,7 +19,7 @@ dependencies:
   - earthaccess
   - cmocean
   - esmpy
-  - xesmf
+  - xesmf>=0.8
   - ipykernel
   - erddapy
   - openpyxl
