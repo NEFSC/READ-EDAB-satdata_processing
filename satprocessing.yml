@@ -10,6 +10,7 @@ dependencies:
   - xarray
   - xarray-regrid
   - netCDF4
+  - h5netcdf
   - h5py
   - dask
   - matplotlib
