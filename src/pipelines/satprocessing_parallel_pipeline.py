@@ -8,6 +8,29 @@ from pathlib import Path
 import time
 from datetime import datetime
 
+"""
+Command Line Usage Examples:
+
+1. Basic run (PSC pipeline):
+   Uses defaults for the psc pipeline and default batch_size (4).
+   $ python3 run_psc_parallel.py --pipeline psc 
+
+2. PSC Pipeline with keywords
+   Uses the default chl dataset, but specifies the sst dataset, map_subset, the batch_size and includes the verbose keyword
+   $ python3 run_psc_parallel.py --pipeline psc --sst_dataset CORALSST --map_subset NES --verbose --batch_size 6
+
+2. Run Primary Production (PP) pipeline based on SST years:
+   Changes the main product to SST, subsets to the NWA region, and increases parallel jobs to 6.
+   $ python3 run_psc_parallel.py --pipeline pp --main_prod sst --sst_dataset modis_aqua_sst --map_subset NWA --batch_size 6
+
+3. Fully loaded run with multiple datasets and verbose output:
+   Runs the PSC pipeline, discovers years based on the RRS dataset, limits the region to NES, runs 8 years concurrently, and prints verbose logs.
+   $ python3 run_psc_parallel.py --pipeline psc --main_prod rrs --rrs_dataset viirs_snpp_rrs --chl_dataset viirs_snpp_chl --sst_dataset viirs_snpp_sst --subset NES --batch_size 8 --verbose
+
+4. Dry run / testing (if implemented downstream):
+   $ python3 run_psc_parallel.py --pipeline psc --chl_dataset test_chl --dry_run --verbose
+"""
+
 
 # Add project root to sys.path
 project_root = Path(__file__).resolve().parent.parent.parent.parent
@@ -16,13 +39,13 @@ sys.path.insert(0, str(project_root))
 from utilities.bootstrap.environment import bootstrap_environment
 env = bootstrap_environment(verbose=False)
 
-from utilities.src.utilities.product_utilities import get_prod_files
+from utilities.src.utilities.file_utilities import get_prod_files
 from utilities.src.utilities.date_utilities import get_source_file_dates
 
 import time
 
 def run_rolling(pipeline, prod, dataset, chl_dataset=None, sst_dataset=None, par_dataset=None, rrs_dataset=None,
-                subset=None, max_parallel=5, verbose=False, log_dir=None, summary_log=None, timestamp=None):
+                map_subset=None, max_parallel=5, verbose=False, log_dir=None, summary_log=None, timestamp=None):
 
     dataset = resolve_dataset(prod, chl_dataset, sst_dataset, par_dataset, rrs_dataset)
     if verbose and not dataset:
@@ -51,7 +74,7 @@ def run_rolling(pipeline, prod, dataset, chl_dataset=None, sst_dataset=None, par
                     chl_dataset=chl_dataset,
                     par_dataset=par_dataset,
                     rrs_dataset=rrs_dataset,
-                    subset=subset,
+                    map_subset=map_subset,
                     log_dir=log_dir,
                     timestamp=timestamp
                 )
@@ -98,7 +121,7 @@ def chunk_years(years, batch_size):
     return [years[i:i + batch_size] for i in range(0, len(years), batch_size)]
 
 def build_command(pipeline, year, chl_dataset=None, sst_dataset=None, par_dataset=None, rrs_dataset=None, 
-                  subset=None, log_dir=None, timestamp=None):
+                  map_subset=None, log_dir=None, timestamp=None):
     pipeline = pipeline.lower().strip()
     script_map = {
         "psc": "psc_pipeline.py",
@@ -118,8 +141,8 @@ def build_command(pipeline, year, chl_dataset=None, sst_dataset=None, par_datase
         cmd += ["--par_dataset", par_dataset]
     if rrs_dataset:
         cmd += ["--rrs_dataset", rrs_dataset]
-    if subset:
-        cmd += ["--subset", subset]
+    if map_subset:
+        cmd += ["--map_subset", map_subset]
     cmd += ["--daterange", str(year)]
 
     if log_dir:
@@ -128,7 +151,7 @@ def build_command(pipeline, year, chl_dataset=None, sst_dataset=None, par_datase
 
     return cmd
 
-def run_year(pipeline, year, chl_dataset=None, sst_dataset=None, par_dataset=None, rrs_dataset=None, subset=None, log_dir=None, timestamp=None):
+def run_year(pipeline, year, chl_dataset=None, sst_dataset=None, par_dataset=None, rrs_dataset=None, map_subset=None, log_dir=None, timestamp=None):
     cmd = build_command(
         pipeline=pipeline,
         year=year,
@@ -136,7 +159,7 @@ def run_year(pipeline, year, chl_dataset=None, sst_dataset=None, par_dataset=Non
         sst_dataset=sst_dataset,
         par_dataset=par_dataset,
         rrs_dataset=rrs_dataset,
-        subset=subset,
+        map_subset=map_subset,
         log_dir=log_dir,
         timestamp=timestamp
     )
@@ -146,7 +169,7 @@ def run_year(pipeline, year, chl_dataset=None, sst_dataset=None, par_dataset=Non
 import time
 
 def run_batches(pipeline, prod, dataset, chl_dataset=None, sst_dataset=None, par_dataset=None, rrs_dataset=None,
-                subset=None, batch_size=5, verbose=False, log_dir=None, summary_log=None, timestamp=None):
+                map_subset=None, batch_size=5, verbose=False, log_dir=None, summary_log=None, timestamp=None):
 
     dataset = resolve_dataset(prod, chl_dataset, sst_dataset, par_dataset, rrs_dataset)
     if verbose and not dataset:
@@ -174,7 +197,7 @@ def run_batches(pipeline, prod, dataset, chl_dataset=None, sst_dataset=None, par
                     chl_dataset=chl_dataset,
                     par_dataset=par_dataset,
                     rrs_dataset=rrs_dataset,
-                    subset=subset,
+                    map_subset=map_subset,
                     log_dir=log_dir,
                     timestamp=timestamp
                 )
@@ -204,7 +227,7 @@ if __name__ == "__main__":
     parser.add_argument("--sst_dataset", type=str, help="Name of SST dataset")
     parser.add_argument("--par_dataset", type=str, help="Name of PAR dataset")
     parser.add_argument("--rrs_dataset", type=str, help="Name of RRS dataset")
-    parser.add_argument("--subset", type=str, help="Region subset (e.g. NES, NWA)")
+    parser.add_argument("--map_subset", type=str, help="Name of map subset (e.g. NES, NWA) region to subset the global data to")
     parser.add_argument("--logfile", type=str, help="Optional path to log file for this run")
     parser.add_argument("--batch_size", type=int, default=4, help="Number of years to run in parallel")
     parser.add_argument("--verbose", action="store_true", help="Enable verbose output")
@@ -228,7 +251,7 @@ if __name__ == "__main__":
         sst_dataset=args.sst_dataset,
         par_dataset=args.par_dataset,
         rrs_dataset=args.rrs_dataset,
-        subset=args.subset,
+        map_subset=args.map_subset,
         batch_size=args.batch_size,
         verbose=args.verbose,
         log_dir=log_dir,
@@ -244,7 +267,7 @@ if __name__ == "__main__":
         sst_dataset=args.sst_dataset,
         par_dataset=args.par_dataset,
         rrs_dataset=args.rrs_dataset,
-        subset=args.subset,
+        map_subset=args.map_subset,
         max_parallel=args.batch_size,  # reuse batch_size as parallel limit
         verbose=args.verbose,
         log_dir=log_dir,

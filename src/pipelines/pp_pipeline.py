@@ -30,7 +30,7 @@ def parse_args():
     parser.add_argument("--chl_dataset", type=str, required=False, help="Name of CHL dataset")
     parser.add_argument("--sst_dataset", type=str, required=False, help="Name of SST dataset")
     parser.add_argument("--par_dataset", type=str, required=False, help="Name of PAR dataset")
-    parser.add_argument("--subset", type=str, required=False, help="Name of the region (e.g. NES, NWA) to subset the data to")
+    parser.add_argument("--map_subset", type=str, required=False, help="Name of the map region (e.g. NES, NWA) to subset the data to")
     parser.add_argument("--daterange", type=str, help="Flexible date input: year(s), date(s), or range")
     parser.add_argument("--logfile", type=str, help="Optional path to log file for this run")  # ← Add this line
     args = parser.parse_args()
@@ -46,7 +46,7 @@ def parse_args():
 
 if __name__ == "__main__":
     args = parse_args()
-    run_pp_pipeline(chl_dataset=args.chl_dataset, sst_dataset=args.sst_dataset, par_dataset=args.par_dataset, subset=args.subset, daterange=args.daterange, logfile=args.logfile)
+    run_pp_pipeline(chl_dataset=args.chl_dataset, sst_dataset=args.sst_dataset, par_dataset=args.par_dataset, map_subset=args.map_subset, daterange=args.daterange, logfile=args.logfile)
 
     # Example terminal window command
     # python3 run_pp_pipeline.py --sst_dataset CORALSST --daterange 1998
