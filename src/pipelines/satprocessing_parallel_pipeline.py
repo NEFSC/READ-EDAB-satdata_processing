@@ -13,22 +13,22 @@ Command Line Usage Examples:
 
 1. Basic run (PSC pipeline):
    Uses defaults for the psc pipeline and default batch_size (4).
-   $ python3 run_psc_parallel.py --pipeline psc 
+   $ python3 satprocessing_parallel_pipeline.py --pipeline psc --map_subset NES
 
 2. PSC Pipeline with keywords
    Uses the default chl dataset, but specifies the sst dataset, map_subset, the batch_size and includes the verbose keyword
-   $ python3 run_psc_parallel.py --pipeline psc --sst_dataset CORALSST --map_subset NES --verbose --batch_size 6
+   $ python3 satprocessing_parallel_pipeline.py --pipeline psc --sst_dataset CORALSST --map_subset NES --verbose --batch_size 6
 
 2. Run Primary Production (PP) pipeline based on SST years:
    Changes the main product to SST, subsets to the NWA region, and increases parallel jobs to 6.
-   $ python3 run_psc_parallel.py --pipeline pp --main_prod sst --sst_dataset modis_aqua_sst --map_subset NWA --batch_size 6
+   $ python3 satprocessing_parallel_pipeline.py --pipeline pp --main_prod chl --sst_dataset ACSPO --map_subset NWA --batch_size 6
 
 3. Fully loaded run with multiple datasets and verbose output:
    Runs the PSC pipeline, discovers years based on the RRS dataset, limits the region to NES, runs 8 years concurrently, and prints verbose logs.
-   $ python3 run_psc_parallel.py --pipeline psc --main_prod rrs --rrs_dataset viirs_snpp_rrs --chl_dataset viirs_snpp_chl --sst_dataset viirs_snpp_sst --subset NES --batch_size 8 --verbose
+   $ python3 satprocessing_parallel_pipeline.py --pipeline psc --main_prod chl --chl_dataset GLOBCOLOUR --sst_dataset ACSPONRT --subset NES --batch_size 8 --verbose
 
 4. Dry run / testing (if implemented downstream):
-   $ python3 run_psc_parallel.py --pipeline psc --chl_dataset test_chl --dry_run --verbose
+   $ python3 satprocessing_parallel_pipeline.py --pipeline psc --chl_dataset test_chl --dry_run --verbose
 """
 
 
@@ -125,7 +125,7 @@ def build_command(pipeline, year, chl_dataset=None, sst_dataset=None, par_datase
     pipeline = pipeline.lower().strip()
     script_map = {
         "psc": "psc_pipeline.py",
-        "pp": "psc_pipeline.py"
+        "pp": "pp_pipeline.py"
     }
 
     if pipeline not in script_map:
