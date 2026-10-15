@@ -36,9 +36,10 @@ def parse_args():
     parser.add_argument("--daterange", type=str, help="Flexible date input: year(s), date(s), or range")
     parser.add_argument("--climatology_range", type=str, help="The year range for the climatology (e.g. 1991,2020)")
     parser.add_argument("--parallel_runs", type=int, default=1, help="The number of stats jobs to run in parallel")
-    parser.add_argument("--logfile", type=str, help="Optional path to log file for this run")  
     parser.add_argument("--verbose", action="store_true", help="Print detailed progress logs")
     parser.add_argument("--debug", action="store_true", help="Enter debug mode")
+    parser.add_argument("--logfile", nargs='?', const="auto", default=None, 
+                        help="Path to log file. Use flag without a path to autogenerate.")
     args = parser.parse_args()
 
 
@@ -69,8 +70,14 @@ if __name__ == "__main__":
     # 💻 Example terminal window commands:
     # ==========================================
     #
-    # 1. Standard Run:
-    # python3 stats_pipeline.py --prods SST --periods W M A --subset NWA --parallel_runs 4
+    # 1. Standard Run (no logging):
+    # python3 stats_pipeline.py --prods SST --periods W M A --map_subset NWA --parallel_runs 4
     #
     # 2. Multi-Product Run with a Logfile:
-    # python3 stats_pipeline.py --prods SST CHL PSC --periods MONTH --subset NES --logfile /path/to/log.txt
+    # python3 stats_pipeline.py --prods SST CHL PSC --periods MONTH --map_subset NES
+    #
+    # 3. Auto-generated logfile:
+    # Auto-generated log: python3 stats_pipeline.py --prods SST --periods M --logfile
+    #
+    # 4. Custom logfile:
+    # python3 stats_pipeline.py --prods SST --periods M --logfile /custom/path/test.log
