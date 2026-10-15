@@ -228,10 +228,11 @@ if __name__ == "__main__":
     parser.add_argument("--par_dataset", type=str, help="Name of PAR dataset")
     parser.add_argument("--rrs_dataset", type=str, help="Name of RRS dataset")
     parser.add_argument("--map_subset", type=str, help="Name of map subset (e.g. NES, NWA) region to subset the global data to")
-    parser.add_argument("--logfile", type=str, help="Optional path to log file for this run")
     parser.add_argument("--batch_size", type=int, default=4, help="Number of years to run in parallel")
     parser.add_argument("--verbose", action="store_true", help="Enable verbose output")
     parser.add_argument("--dry_run", action="store_true", help="Preview commands without executing")
+    parser.add_argument("--logfile", nargs='?', const="auto", default=None, 
+                        help="Optional path to log file. Use flag without a path to autogenerate.")
     args = parser.parse_args()
 
     log_root = env["satlogs_path"]
