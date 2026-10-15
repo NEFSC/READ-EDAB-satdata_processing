@@ -32,8 +32,13 @@ def parse_args():
     parser.add_argument("--par_dataset", type=str, required=False, help="Name of PAR dataset")
     parser.add_argument("--map_subset", type=str, required=False, help="Name of the map region (e.g. NES, NWA) to subset the data to")
     parser.add_argument("--daterange", type=str, help="Flexible date input: year(s), date(s), or range")
-    parser.add_argument("--logfile", type=str, help="Optional path to log file for this run")  # ← Add this line
+    parser.add_argument("--logfile", nargs='?', const="auto", default=None, 
+                        help="Path to log file. Use flag without a path to autogenerate.")
     args = parser.parse_args()
+
+    for key, val in vars(args).items():
+            if isinstance(val, str) and val.strip().lower() == "none":
+                setattr(args, key, None)
 
     if args.daterange:
         try:
