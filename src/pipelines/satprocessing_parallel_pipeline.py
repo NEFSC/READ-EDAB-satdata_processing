@@ -235,8 +235,14 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     log_root = env["satlogs_path"]
-    
     timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+
+    # Use the user-provided logfile if it exists, otherwise autogenerate the summary log
+    if args.logfile:
+        summary_log_path = Path(args.logfile)
+    else:
+        summary_log_path = log_root / f"{args.pipeline.lower()}_summary_{timestamp}.log"
+
     summary_log_path = log_root / f"{args.pipeline.lower()}_summary_{timestamp}.log"
 
     log_dir = log_root / args.pipeline.lower()
