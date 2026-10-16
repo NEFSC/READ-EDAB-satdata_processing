@@ -74,11 +74,6 @@ if __name__ == "__main__":
     if not any([args.run_globcolour, args.run_psc, args.run_pp, args.run_stats, args.run_anom]):
         print("⚠️ No execution steps selected! Use --run_globcolour, --run_psc, --run_pp, --run_stats, and/or --run_anom.")
         sys.exit(1)
-    
-    # Ensure at least one step was selected
-    if not any([args.run_psc, args.run_pp, args.run_stats, args.run_anom]):
-        print("⚠️ No execution steps selected! Use --run_psc, --run_pp, --run_stats, and/or --run_anom.")
-        sys.exit(1)
 
     print(f"\n{'*'*80}")
     print(f"🌟 PROCESSING PIPELINE INITIALIZED FOR DATASET: {args.dataset.upper()}")
