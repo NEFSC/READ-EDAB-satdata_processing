@@ -84,7 +84,7 @@ if __name__ == "__main__":
     # ==========================================
     if args.run_psc:
         cmd = [
-            python_exe, str(script_dir / "psc_pp_pipeline.py"),
+            python_exe, str(script_dir / "psc_pp_parallel_pipeline.py"),
             "--pipeline", "psc",
             "--chl_dataset", args.dataset,
             "--map_subset", args.map_subset,
@@ -101,7 +101,7 @@ if __name__ == "__main__":
     # ==========================================
     if args.run_pp:
         cmd = [
-            python_exe, str(script_dir / "psc_pp_pipeline.py"),
+            python_exe, str(script_dir / "psc_pp_parallel_pipeline.py"),
             "--pipeline", "pp",
             "--chl_dataset", args.dataset,
             "--map_subset", args.map_subset,
