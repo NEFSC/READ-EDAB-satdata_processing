@@ -62,10 +62,6 @@ def parse_args():
     parser.add_argument("--verbose", action="store_true", help="Enable verbose logging")
     parser.add_argument("--logfile", nargs='?', const="auto", default=None, help="Generate logfiles for all executed steps")
 
-    if not any([args.run_globcolour, args.run_psc, args.run_pp, args.run_stats, args.run_anom]):
-        print("⚠️ No execution steps selected! Use --run_globcolour, --run_psc, --run_pp, --run_stats, and/or --run_anom.")
-        sys.exit(1)
-
     return parser.parse_args()
 
 if __name__ == "__main__":
@@ -73,6 +69,11 @@ if __name__ == "__main__":
     
     python_exe = sys.executable
     script_dir = Path(__file__).resolve().parent
+
+    # Ensure at least one step was selected 
+    if not any([args.run_globcolour, args.run_psc, args.run_pp, args.run_stats, args.run_anom]):
+        print("⚠️ No execution steps selected! Use --run_globcolour, --run_psc, --run_pp, --run_stats, and/or --run_anom.")
+        sys.exit(1)
     
     # Ensure at least one step was selected
     if not any([args.run_psc, args.run_pp, args.run_stats, args.run_anom]):
