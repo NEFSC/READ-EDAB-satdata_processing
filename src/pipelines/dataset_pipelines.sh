@@ -3,7 +3,7 @@
 # Exit immediately if any pipeline step fails
 set -e 
 
-eecho "================================================================================"
+echo "================================================================================"
 echo "🚀 1. Preprocessing GLOBCOLOUR (for PAR data)"
 echo "================================================================================"
 python3 satdata_processing_pipeline.py --dataset GLOBCOLOUR --run_globcolour --map_subset NWA --logfile
