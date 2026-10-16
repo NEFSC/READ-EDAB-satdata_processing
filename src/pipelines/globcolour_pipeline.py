@@ -39,7 +39,8 @@ def parse_args():
     parser.add_argument("--map_subset", type=str, default="NWA", help="Name of the map_region (e.g. NES, NWA) to subset the data to.")
     parser.add_argument("--verbose", action="store_true", help="Include detailed debugging steps in the output.")
     parser.add_argument("--overwrite", action="store_true", help="Overwrite the output files if they already exist.")
-    parser.add_argument("--logfile", type=str, help="Optional override path to log file for this run.")
+    parser.add_argument("--logfile", nargs='?', const="auto", default=None, 
+                        help="Path to log file. Use flag without a path to autogenerate.")
     return parser.parse_args()
 
 

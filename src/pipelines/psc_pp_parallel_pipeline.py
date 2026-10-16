@@ -1,4 +1,4 @@
-# run_psc_parallel.py
+# psc_pp_parallel.py
 import argparse
 import sys
 from pathlib import Path
@@ -243,8 +243,6 @@ if __name__ == "__main__":
         summary_log_path = Path(args.logfile)
     else:
         summary_log_path = log_root / f"{args.pipeline.lower()}_summary_{timestamp}.log"
-
-    summary_log_path = log_root / f"{args.pipeline.lower()}_summary_{timestamp}.log"
 
     log_dir = log_root / args.pipeline.lower()
     log_dir.mkdir(parents=True, exist_ok=True)
