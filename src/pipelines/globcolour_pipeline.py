@@ -74,7 +74,7 @@ if __name__ == "__main__":
         # Note: We tie 'debug' to 'args.verbose' so tracebacks are hidden during clean runs 
         # but exposed when the verbose flag is used.
         run_globcolour_dataset(
-            subset_map=args.map_subset, 
+            map_subset=args.map_subset, 
             overwrite=args.overwrite, 
             verbose=True,
             debug=args.verbose, 
