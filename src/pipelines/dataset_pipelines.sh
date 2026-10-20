@@ -6,12 +6,14 @@ set -e
 echo "================================================================================"
 echo "🚀 1. Preprocessing GLOBCOLOUR (for PAR data)"
 echo "================================================================================"
-python3 satdata_processing_pipeline.py --dataset GLOBCOLOUR --run_globcolour --map_subset NWA --logfile
+python3 satdata_processing_pipeline.py --dataset GLOBCOLOUR --run_globcolour --map_subset NWA --parallel_runs 6 --logfile
 
 echo "================================================================================"
 echo "🚀 2. Running OCCCI (PSC at NES)"
 echo "================================================================================"
-python3 satdata_processing_pipeline.py --dataset OCCCI --sst_dataset CORALSST --run_psc --map_subset NES --run_stats --stat_prods PSC --stat_periods D3 D7 W M A DOY WEEK MONTH --logfile
+python3 satdata_processing_pipeline.py --dataset OCCCI --sst_dataset CORALSST --run_psc --map_subset NES \
+        --run_stats --stat_prods PSC --stat_periods D3 D7 W M A DOY WEEK MONTH \
+        --parallel_runs 6 --logfile
 
 echo "================================================================================"
 echo "🚀 3. Running OCCCI (at NWA)"
@@ -20,7 +22,7 @@ python3 satdata_processing_pipeline.py --dataset OCCCI --sst_dataset CORALSST --
         --run_pp \
         --run_stats --stat_prods CHL PPD --stat_periods D3 D7 W M A DOY WEEK MONTH \
         --run_anom --anom_prods CHL --anom_periods W M \
-        --logfile
+        --parallel_runs 6 --logfile
 echo "================================================================================"
 echo "🚀 4. Running Stats and Anomalies for ACSPO"
 echo "================================================================================"

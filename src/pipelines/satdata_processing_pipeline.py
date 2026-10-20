@@ -57,7 +57,7 @@ def parse_args():
     parser.add_argument("--anom_periods", type=str, nargs='+', default=["M", "A", "SEASON"], help="Periods for Anomalies (default: M A SEASON)")
     
     # 🎯 Hardware and Logging
-    parser.add_argument("--batch_size", type=int, default=4, help="Number of years to run in parallel for PSC/PP (default: 4)")
+   # parser.add_argument("--batch_size", type=int, default=4, help="Number of years to run in parallel for PSC/PP (default: 4)")
     parser.add_argument("--parallel_runs", type=int, default=4, help="Number of parallel workers for Stats/Anomalies (default: 4)")
     parser.add_argument("--verbose", action="store_true", help="Enable verbose logging")
     parser.add_argument("--logfile", nargs='?', const="auto", default=None, help="Generate logfiles for all executed steps")
@@ -88,7 +88,7 @@ if __name__ == "__main__":
             "--pipeline", "psc",
             "--chl_dataset", args.dataset,
             "--map_subset", args.map_subset,
-            "--batch_size", str(args.batch_size)
+            "--batch_size", str(args.parallel_runs)
         ]
         if args.sst_dataset: cmd.extend(["--sst_dataset", args.sst_dataset])
         if args.verbose: cmd.append("--verbose")
@@ -105,7 +105,7 @@ if __name__ == "__main__":
             "--pipeline", "pp",
             "--chl_dataset", args.dataset,
             "--map_subset", args.map_subset,
-            "--batch_size", str(args.batch_size)
+            "--batch_size", str(args.parallel_runs)
         ]
         if args.sst_dataset: cmd.extend(["--sst_dataset", args.sst_dataset])
         if args.par_dataset: cmd.extend(["--par_dataset", args.par_dataset])
@@ -157,7 +157,8 @@ if __name__ == "__main__":
         else:
             cmd = [
                 python_exe, str(script_dir / "globcolour_pipeline.py"),
-                "--map_subset", args.map_subset
+                "--map_subset", args.map_subset,
+                "--parallel_runs", str(args.parallel_runs)
             ]
             if args.overwrite: cmd.append("--overwrite")
             if args.verbose: cmd.append("--verbose")
