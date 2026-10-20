@@ -37,6 +37,7 @@ class LoggerWriter:
 def parse_args():
     parser = argparse.ArgumentParser(description="Run the GLOBCOLOUR preprocessing pipeline")
     parser.add_argument("--map_subset", type=str, default="NWA", help="Name of the map_region (e.g. NES, NWA) to subset the data to.")
+    parser.add_argument("--parallel_runs", type=int, default=1, help="Number of jobs to run in parallel") 
     parser.add_argument("--verbose", action="store_true", help="Include detailed debugging steps in the output.")
     parser.add_argument("--overwrite", action="store_true", help="Overwrite the output files if they already exist.")
     parser.add_argument("--logfile", nargs='?', const="auto", default=None, 
@@ -75,6 +76,7 @@ if __name__ == "__main__":
         # but exposed when the verbose flag is used.
         run_globcolour_dataset(
             map_subset=args.map_subset, 
+            parallel_runs=args.parallel_runs,
             overwrite=args.overwrite, 
             verbose=True,
             debug=args.verbose, 
