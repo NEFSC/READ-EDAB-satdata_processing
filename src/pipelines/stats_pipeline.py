@@ -53,6 +53,13 @@ def parse_args():
     return args
 
 if __name__ == "__main__":
+    # Force multiprocessing to 'spawn' instead of 'fork' to prevent HDF5 core dumps
+    import multiprocessing
+    try:
+        multiprocessing.set_start_method('spawn')
+    except RuntimeError:
+        pass  # Catch if it's already been set
+    
     args = parse_args()
     run_stats_pipeline(prods=args.prods,
                        periods=args.periods,
