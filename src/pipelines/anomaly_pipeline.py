@@ -28,8 +28,8 @@ def flatten_dates(d):
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Run anomaly pipeline")
-    parser.add_argument("--prods", type=str, nargs='+', required=True, help="Name of product(s)")
-    parser.add_argument("--periods", type=str, nargs='+', required=True, help="Period code(s) of the output anomalies (e.g. W, M, A)")
+    parser.add_argument("--prods", type=str, nargs='+', required=False, default=None, help="Name of product(s)")
+    parser.add_argument("--periods", type=str, nargs='+', required=False, default=None, help="Period code(s) of the output statistics (e.g. W, M, A)")
     parser.add_argument("--dataset", type=str, required=False, help="Name of product dataset (e.g. CHL, SST, PSC)")
     parser.add_argument("--version", type=str, required=False, help="Name of dataset version (e.g. V6.0)")
     parser.add_argument("--map_subset", type=str, required=False, help="Name of the map region (e.g. NES, NWA) to subset the data to")
