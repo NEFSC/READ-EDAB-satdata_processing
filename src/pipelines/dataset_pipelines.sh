@@ -6,7 +6,7 @@ set -e
 echo "================================================================================"
 echo "🚀 1. Preprocessing GLOBCOLOUR (for PAR data)"
 echo "================================================================================"
-python3 satdata_processing_pipeline.py --dataset GLOBCOLOUR --run_globcolour --map_subset NWA --parallel_runs 6 --logfile
+#python3 satdata_processing_pipeline.py --dataset GLOBCOLOUR --run_globcolour --map_subset NWA --parallel_runs 6 --logfile
 
 echo "================================================================================"
 echo "🚀 3. Running OCCCI stats/anomalies (at NWA)"
