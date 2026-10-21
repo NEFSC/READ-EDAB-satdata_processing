@@ -50,6 +50,7 @@ def parse_args():
     parser.add_argument("--par_dataset", type=str, help="PAR dataset required for PP (e.g., GLOBCOLOUR)")
     
     # 🎯 Separated Stats and Anomaly Targets
+    parser.add_argument("--globcolour_prods", type=str, nargs='+', default=None, help="Products to run for Globcolour processing")
     parser.add_argument("--stat_prods", type=str, nargs='+', default=None, help="Products to run for Statistics")
     parser.add_argument("--stat_periods", type=str, nargs='+', default=None, help="Periods for Statistics")
     parser.add_argument("--anom_prods", type=str, nargs='+', default=None, help="Products to run for Anomalies")
@@ -170,6 +171,7 @@ if __name__ == "__main__":
         else:
             cmd = [
                 python_exe, str(script_dir / "globcolour_pipeline.py"),
+                "--prods",args.globcolour_prods
                 "--map_subset", args.map_subset,
                 "--parallel_runs", str(args.parallel_runs)
             ]
