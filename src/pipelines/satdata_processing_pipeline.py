@@ -36,7 +36,7 @@ def parse_args():
     
     # 🎯 Primary Configuration
     parser.add_argument("--dataset", type=str, required=True, help="Main dataset to process (e.g., OCCCI, GLOBCOLOUR, ACSPO)")
-    parser.add_argument("--map_subset", type=str, default="NES", help="Subset region (default: NES)")
+    parser.add_argument("--map_subset", type=str, default="NWA", help="Subset region (default: NWA)")
     
     # 🎯 Execution Steps (Toggle which pipelines to run)
     parser.add_argument("--run_psc", action="store_true", help="Run the Phytoplankton Size Class pipeline")
@@ -47,17 +47,19 @@ def parse_args():
     
     # 🎯 Pipeline Specific Arguments
     parser.add_argument("--sst_dataset", type=str, help="SST dataset required for PSC and PP (e.g., CORALSST, ACSPO)")
-    parser.add_argument("--par_dataset", type=str, help="PAR dataset required for PP (e.g., MODIS)")
-    parser.add_argument("--overwrite", action="store_true", help="Overwrite existing outputs")
-
+    parser.add_argument("--par_dataset", type=str, help="PAR dataset required for PP (e.g., GLOBCOLOUR)")
+    
     # 🎯 Separated Stats and Anomaly Targets
-    parser.add_argument("--stat_prods", type=str, nargs='+', default=["CHL", "PSC", "PPD"], help="Products to run for Statistics (default: CHL PSC PPD)")
-    parser.add_argument("--stat_periods", type=str, nargs='+', default=["M", "A", "SEASON"], help="Periods for Statistics (default: M A SEASON)")
-    parser.add_argument("--anom_prods", type=str, nargs='+', default=["CHL", "PSC", "PPD"], help="Products to run for Anomalies (default: CHL PSC PPD)")
-    parser.add_argument("--anom_periods", type=str, nargs='+', default=["M", "A", "SEASON"], help="Periods for Anomalies (default: M A SEASON)")
+    parser.add_argument("--stat_prods", type=str, nargs='+', default=None, help="Products to run for Statistics")
+    parser.add_argument("--stat_periods", type=str, nargs='+', default=None, help="Periods for Statistics")
+    parser.add_argument("--anom_prods", type=str, nargs='+', default=None, help="Products to run for Anomalies")
+    parser.add_argument("--anom_periods", type=str, nargs='+', default=None, help="Periods for Anomalies")
+    
+    # 🎯 File Handling
+    parser.add_argument("--overwrite", action="store_true", help="Overwrite existing outputs")
+    parser.add_argument("--delete_corrupt", action="store_true", help="Delete identified corrupt source files")
     
     # 🎯 Hardware and Logging
-   # parser.add_argument("--batch_size", type=int, default=4, help="Number of years to run in parallel for PSC/PP (default: 4)")
     parser.add_argument("--parallel_runs", type=int, default=4, help="Number of parallel workers for Stats/Anomalies (default: 4)")
     parser.add_argument("--verbose", action="store_true", help="Enable verbose logging")
     parser.add_argument("--logfile", nargs='?', const="auto", default=None, help="Generate logfiles for all executed steps")
@@ -127,12 +129,14 @@ if __name__ == "__main__":
     if args.run_stats:
         cmd = [
             python_exe, str(script_dir / "stats_pipeline.py"),
-            "--prods", *args.stat_prods,
-            "--periods", *args.stat_periods,
             "--dataset", args.dataset,
             "--map_subset", args.map_subset,
             "--parallel_runs", str(args.parallel_runs)
         ]
+        # Only append if provided
+        if args.stat_prods: cmd.extend(["--prods"] + args.stat_prods)
+        if args.stat_periods: cmd.extend(["--periods"] + args.stat_periods)
+        
         if args.verbose: cmd.append("--verbose")
         if args.logfile: cmd.extend(["--logfile", "auto"])
             
@@ -144,12 +148,14 @@ if __name__ == "__main__":
     if args.run_anom:
         cmd = [
             python_exe, str(script_dir / "anomaly_pipeline.py"),
-            "--prods", *args.anom_prods,
-            "--periods", *args.anom_periods,
             "--dataset", args.dataset,
             "--map_subset", args.map_subset,
             "--parallel_runs", str(args.parallel_runs)
         ]
+        # Only append if provided
+        if args.anom_prods: cmd.extend(["--prods"] + args.anom_prods)
+        if args.anom_periods: cmd.extend(["--periods"] + args.anom_periods)
+        
         if args.verbose: cmd.append("--verbose")
         if args.logfile: cmd.extend(["--logfile", "auto"])
             
@@ -168,6 +174,7 @@ if __name__ == "__main__":
                 "--parallel_runs", str(args.parallel_runs)
             ]
             if args.overwrite: cmd.append("--overwrite")
+            if args.delete_corrupt: cmd.append("--delete_corrupt")
             if args.verbose: cmd.append("--verbose")
             if args.logfile: cmd.extend(["--logfile", "auto"])
                 
