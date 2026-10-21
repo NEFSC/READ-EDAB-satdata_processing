@@ -171,7 +171,7 @@ if __name__ == "__main__":
         else:
             cmd = [
                 python_exe, str(script_dir / "globcolour_pipeline.py"),
-                "--prods",args.globcolour_prods
+                "--prods",args.globcolour_prods,
                 "--map_subset", args.map_subset,
                 "--parallel_runs", str(args.parallel_runs)
             ]
