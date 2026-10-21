@@ -36,10 +36,12 @@ class LoggerWriter:
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Run the GLOBCOLOUR preprocessing pipeline")
+    parser.add_argument("--prods", type=str, nargs='+', default=None, help="Specific products to process (e.g. CHL PAR)")
     parser.add_argument("--map_subset", type=str, default="NWA", help="Name of the map_region (e.g. NES, NWA) to subset the data to.")
     parser.add_argument("--parallel_runs", type=int, default=1, help="Number of jobs to run in parallel") 
     parser.add_argument("--verbose", action="store_true", help="Include detailed debugging steps in the output.")
     parser.add_argument("--overwrite", action="store_true", help="Overwrite the output files if they already exist.")
+    parser.add_argument("--delete_corrupt", action="store_true", help="Delete identified corrupt source files")
     parser.add_argument("--logfile", nargs='?', const="auto", default=None, 
                         help="Path to log file. Use flag without a path to autogenerate.")
     return parser.parse_args()
@@ -75,9 +77,11 @@ if __name__ == "__main__":
         # Note: We tie 'debug' to 'args.verbose' so tracebacks are hidden during clean runs 
         # but exposed when the verbose flag is used.
         run_globcolour_dataset(
+            prods=args.prods,
             map_subset=args.map_subset, 
             parallel_runs=args.parallel_runs,
             overwrite=args.overwrite, 
+            delete_corrupt=args.delete_corrupt,
             verbose=True,
             debug=args.verbose, 
             dry_run=False  
