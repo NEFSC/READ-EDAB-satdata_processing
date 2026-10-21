@@ -9,6 +9,14 @@ echo "==========================================================================
 python3 satdata_processing_pipeline.py --dataset GLOBCOLOUR --run_globcolour --map_subset NWA --parallel_runs 6 --logfile
 
 echo "================================================================================"
+echo "🚀 3. Running OCCCI stats/anomalies (at NWA)"
+echo "================================================================================"
+python3 satdata_processing_pipeline.py --dataset OCCCI --map_subset NWA \
+        --run_stats --stat_prods CHL --stat_periods D3 D7 W M A DOY WEEK MONTH \
+        --run_anom --anom_prods CHL --anom_periods W M \
+        --parallel_runs 6 --logfile
+
+echo "================================================================================"
 echo "🚀 2. Running OCCCI (PSC at NES)"
 echo "================================================================================"
 python3 satdata_processing_pipeline.py --dataset OCCCI --sst_dataset CORALSST --run_psc --map_subset NES \
@@ -16,12 +24,11 @@ python3 satdata_processing_pipeline.py --dataset OCCCI --sst_dataset CORALSST --
         --parallel_runs 6 --logfile
 
 echo "================================================================================"
-echo "🚀 3. Running OCCCI (at NWA)"
+echo "🚀 3. Running OCCCI (PPD at NWA)"
 echo "================================================================================"
 python3 satdata_processing_pipeline.py --dataset OCCCI --sst_dataset CORALSST --par_dataset GLOBCOLOUR --map_subset NWA \
         --run_pp \
-        --run_stats --stat_prods CHL PPD --stat_periods D3 D7 W M A DOY WEEK MONTH \
-        --run_anom --anom_prods CHL --anom_periods W M \
+        --run_stats --stat_prods PPD --stat_periods D3 D7 W M A DOY WEEK MONTH \
         --parallel_runs 6 --logfile
 echo "================================================================================"
 echo "🚀 4. Running Stats and Anomalies for ACSPO"
