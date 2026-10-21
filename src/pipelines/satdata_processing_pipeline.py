@@ -171,10 +171,10 @@ if __name__ == "__main__":
         else:
             cmd = [
                 python_exe, str(script_dir / "globcolour_pipeline.py"),
-                "--prods",args.globcolour_prods,
                 "--map_subset", args.map_subset,
                 "--parallel_runs", str(args.parallel_runs)
             ]
+            if args.globcolour_prods: cmd.extend(["--prods"] + args.globcolour_prods)
             if args.overwrite: cmd.append("--overwrite")
             if args.delete_corrupt: cmd.append("--delete_corrupt")
             if args.verbose: cmd.append("--verbose")
