@@ -9,6 +9,7 @@ dependencies:
   - pandas
   - xarray
   - xarray-regrid
+  - rioxarray
   - netCDF4
   - h5netcdf
   - h5py
