@@ -3,6 +3,8 @@
 *.pptx
 .DS*
 .DS_Store
+*.log
 
 .ipynb_checkpoints/
 __pycache__/
+/env_logs/
