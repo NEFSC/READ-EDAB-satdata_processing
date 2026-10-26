@@ -6,7 +6,6 @@ import ast
 
 # Add project root to sys.path
 project_root = Path(__file__).resolve().parent.parent.parent.parent
-print(f"Project Root = {project_root}")
 sys.path.insert(0, str(project_root))
 
 from utilities.bootstrap.environment import bootstrap_environment
