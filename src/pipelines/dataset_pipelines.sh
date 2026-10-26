@@ -9,6 +9,7 @@ echo "==========================================================================
 python3 satdata_processing_pipeline.py --dataset OCCCI --map_subset NWA \
         --run_stats --stat_prods CHL --stat_periods D3 D7 W M A DOY WEEK MONTH \
         --run_anom --anom_prods CHL --anom_periods W M \
+        --run_extract --extract_prods CHL --extract_periods W D7 M A --extract_shapefile NES_EPU_NOESTUARIES \
         --parallel_runs 6 --logfile
 
 echo "================================================================================"
