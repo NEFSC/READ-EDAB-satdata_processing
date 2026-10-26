@@ -44,6 +44,8 @@ def parse_args():
     parser.add_argument("--run_stats", action="store_true", help="Run the Statistics pipeline")
     parser.add_argument("--run_anom", action="store_true", help="Run the Anomaly pipeline")
     parser.add_argument("--run_globcolour", action="store_true", help="Run the GlobColour Preprocessing pipeline")
+    parser.add_argument("--run_extract", action="store_true", help="Run the Regional Data Extraction pipeline")
+
     
     # 🎯 Pipeline Specific Arguments
     parser.add_argument("--sst_dataset", type=str, help="SST dataset required for PSC and PP (e.g., CORALSST, ACSPO)")
@@ -56,6 +58,12 @@ def parse_args():
     parser.add_argument("--anom_prods", type=str, nargs='+', default=None, help="Products to run for Anomalies")
     parser.add_argument("--anom_periods", type=str, nargs='+', default=None, help="Periods for Anomalies")
     
+    # 🎯 Extraction Specific Arguments
+    parser.add_argument("--extract_prods", type=str, nargs='+', default=None, help="Products to run for Extraction")
+    parser.add_argument("--extract_periods", type=str, nargs='+', default=None, help="Periods for Extraction")
+    parser.add_argument("--extract_shapefile", type=str, default=None, help="Shapefile name to extract")
+    parser.add_argument("--extract_stat_type", type=str, default=None, help="Target statistic type (e.g., mean, median)")
+   
     # 🎯 File Handling
     parser.add_argument("--overwrite", action="store_true", help="Overwrite existing outputs")
     parser.add_argument("--delete_corrupt", action="store_true", help="Delete identified corrupt source files")
@@ -81,8 +89,8 @@ if __name__ == "__main__":
     script_dir = Path(__file__).resolve().parent
 
     # Ensure at least one step was selected 
-    if not any([args.run_globcolour, args.run_psc, args.run_pp, args.run_stats, args.run_anom]):
-        print("⚠️ No execution steps selected! Use --run_globcolour, --run_psc, --run_pp, --run_stats, and/or --run_anom.")
+    if not any([args.run_globcolour, args.run_psc, args.run_pp, args.run_stats, args.run_anom, args.run_extract]):
+        print("⚠️ No execution steps selected! Use --run_globcolour, --run_psc, --run_pp, --run_stats, --run_anom, and/or --run_extract.")
         sys.exit(1)
 
     print(f"\n{'*'*80}")
@@ -181,6 +189,30 @@ if __name__ == "__main__":
             if args.logfile: cmd.extend(["--logfile", "auto"])
                 
             run_command(cmd, "GlobColour Preprocessing")
+
+    # ==========================================
+    # 6. DATA EXTRACTION
+    # ==========================================
+    if args.run_extract:
+        if not args.shapefile:
+            print("⚠️ Skipping Data Extraction: A --shapefile must be provided.")
+        else:
+            cmd = [
+                python_exe, str(script_dir / "extraction_pipeline.py"),
+                "--dataset", args.dataset,
+                "--map_subset", args.map_subset,
+                "--shapefile", args.extract_shapefile,
+                "--parallel_runs", str(args.parallel_runs)
+            ]
+            
+            if args.extract_prods: cmd.extend(["--prods"] + args.extract_prods)
+            if args.extract_periods: cmd.extend(["--periods"] + args.extract_periods)
+            if args.stat_type: cmd.extend(["--stat_type", args.extract_stat_type])
+            
+            if args.verbose: cmd.append("--verbose")
+            if args.logfile: cmd.extend(["--logfile", "auto"])
+                
+            run_command(cmd, "Data Extraction")
 
     print(f"{'*'*80}")
     print(f"🎉 ALL REQUESTED PROCESSING PIPELINE STEPS COMPLETED SUCCESSFULLY!")
