@@ -207,7 +207,7 @@ if __name__ == "__main__":
             
             if args.extract_prods: cmd.extend(["--prods"] + args.extract_prods)
             if args.extract_periods: cmd.extend(["--periods"] + args.extract_periods)
-            if args.stat_type: cmd.extend(["--stat_type", args.extract_stat_type])
+            if args.extract_stat_type: cmd.extend(["--stat_type", args.extract_stat_type])
             
             if args.verbose: cmd.append("--verbose")
             if args.logfile: cmd.extend(["--logfile", "auto"])
