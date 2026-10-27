@@ -194,7 +194,7 @@ if __name__ == "__main__":
     # 6. DATA EXTRACTION
     # ==========================================
     if args.run_extract:
-        if not args.shapefile:
+        if not args.extract_shapefile:
             print("⚠️ Skipping Data Extraction: A --shapefile must be provided.")
         else:
             cmd = [
