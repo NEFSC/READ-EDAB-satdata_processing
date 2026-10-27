@@ -36,7 +36,7 @@ def parse_args():
     
     # 🎯 Primary Configuration
     parser.add_argument("--dataset", type=str, required=True, help="Main dataset to process (e.g., OCCCI, GLOBCOLOUR, ACSPO)")
-    parser.add_argument("--map_subset", type=str, default="NWA", help="Subset region (default: NWA)")
+    parser.add_argument("--map_subset", type=str, default=None, help="Subset region (default: NWA)")
     
     # 🎯 Execution Steps (Toggle which pipelines to run)
     parser.add_argument("--run_psc", action="store_true", help="Run the Phytoplankton Size Class pipeline")
@@ -194,7 +194,7 @@ if __name__ == "__main__":
     # 6. DATA EXTRACTION
     # ==========================================
     if args.run_extract:
-        if not args.shapefile:
+        if not args.extract_shapefile:
             print("⚠️ Skipping Data Extraction: A --shapefile must be provided.")
         else:
             cmd = [
