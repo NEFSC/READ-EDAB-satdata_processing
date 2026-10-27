@@ -36,7 +36,7 @@ def parse_args():
     
     # 🎯 Primary Configuration
     parser.add_argument("--dataset", type=str, required=True, help="Main dataset to process (e.g., OCCCI, GLOBCOLOUR, ACSPO)")
-    parser.add_argument("--map_subset", type=str, default="NWA", help="Subset region (default: NWA)")
+    parser.add_argument("--map_subset", type=str, default=None, help="Subset region (default: NWA)")
     
     # 🎯 Execution Steps (Toggle which pipelines to run)
     parser.add_argument("--run_psc", action="store_true", help="Run the Phytoplankton Size Class pipeline")
