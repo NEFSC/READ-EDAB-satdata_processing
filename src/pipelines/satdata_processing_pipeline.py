@@ -18,7 +18,8 @@ def run_command(cmd, step_name):
     """
     print(f"\n{'='*80}")
     print(f"🚀 STARTING PROCESSING STEP: {step_name.upper()} at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print(f"💻 Command: {' '.join(cmd)}")
+    safe_cmd = [str(x) for x in cmd if x is not None]
+    print(f"💻 Command: {' '.join(safe_cmd)}")
     print(f"{'='*80}\n")
     
     # Run the process and stream output directly to the terminal
@@ -105,9 +106,9 @@ if __name__ == "__main__":
             python_exe, str(script_dir / "psc_pp_parallel_pipeline.py"),
             "--pipeline", "psc",
             "--chl_dataset", args.dataset,
-            "--map_subset", args.map_subset,
             "--batch_size", str(args.parallel_runs)
         ]
+        if args.map_subset: cmd.extend(["--map_subset", args.map_subset])
         if args.sst_dataset: cmd.extend(["--sst_dataset", args.sst_dataset])
         if args.verbose: cmd.append("--verbose")
         if args.logfile: cmd.extend(["--logfile", "auto"])
@@ -122,9 +123,9 @@ if __name__ == "__main__":
             python_exe, str(script_dir / "psc_pp_parallel_pipeline.py"),
             "--pipeline", "pp",
             "--chl_dataset", args.dataset,
-            "--map_subset", args.map_subset,
             "--batch_size", str(args.parallel_runs)
         ]
+        if args.map_subset: cmd.extend(["--map_subset", args.map_subset])
         if args.sst_dataset: cmd.extend(["--sst_dataset", args.sst_dataset])
         if args.par_dataset: cmd.extend(["--par_dataset", args.par_dataset])
         if args.verbose: cmd.append("--verbose")
@@ -139,10 +140,10 @@ if __name__ == "__main__":
         cmd = [
             python_exe, str(script_dir / "stats_pipeline.py"),
             "--dataset", args.dataset,
-            "--map_subset", args.map_subset,
             "--parallel_runs", str(args.parallel_runs)
         ]
         # Only append if provided
+        if args.map_subset: cmd.extend(["--map_subset", args.map_subset])
         if args.stat_prods: cmd.extend(["--prods"] + args.stat_prods)
         if args.stat_periods: cmd.extend(["--periods"] + args.stat_periods)
         
@@ -158,10 +159,10 @@ if __name__ == "__main__":
         cmd = [
             python_exe, str(script_dir / "anomaly_pipeline.py"),
             "--dataset", args.dataset,
-            "--map_subset", args.map_subset,
             "--parallel_runs", str(args.parallel_runs)
         ]
         # Only append if provided
+        if args.map_subset: cmd.extend(["--map_subset", args.map_subset])
         if args.anom_prods: cmd.extend(["--prods"] + args.anom_prods)
         if args.anom_periods: cmd.extend(["--periods"] + args.anom_periods)
         
@@ -179,9 +180,9 @@ if __name__ == "__main__":
         else:
             cmd = [
                 python_exe, str(script_dir / "globcolour_pipeline.py"),
-                "--map_subset", args.map_subset,
                 "--parallel_runs", str(args.parallel_runs)
             ]
+            if args.map_subset: cmd.extend(["--map_subset", args.map_subset])
             if args.globcolour_prods: cmd.extend(["--prods"] + args.globcolour_prods)
             if args.overwrite: cmd.append("--overwrite")
             if args.delete_corrupt: cmd.append("--delete_corrupt")
@@ -200,11 +201,10 @@ if __name__ == "__main__":
             cmd = [
                 python_exe, str(script_dir / "extraction_pipeline.py"),
                 "--dataset", args.dataset,
-                "--map_subset", args.map_subset,
                 "--shapefile", args.extract_shapefile,
                 "--parallel_runs", str(args.parallel_runs)
             ]
-            
+            if args.map_subset: cmd.extend(["--map_subset", args.map_subset])
             if args.extract_prods: cmd.extend(["--prods"] + args.extract_prods)
             if args.extract_periods: cmd.extend(["--periods"] + args.extract_periods)
             if args.extract_stat_type: cmd.extend(["--stat_type", args.extract_stat_type])
