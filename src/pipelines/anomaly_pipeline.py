@@ -37,6 +37,7 @@ def parse_args():
     parser.add_argument("--climatology_range", type=str, help="The year range for the climatology (e.g. 1991,2020)")
     parser.add_argument("--stat_var", type=str, required=False, help="The specific statistic to base the anomaly on (e.g., mean, median, max)")
     parser.add_argument("--parallel_runs", type=int, default=1, help="The number of anomaly jobs to run in parallel")
+    parser.add_argument("--verify_existing", action=argparse.BooleanOptionalAction, default=True, help="If false, blindly trusts mtime instead of opening NetCDF files to check attributes (Fast Mode)")
     parser.add_argument("--verbose", action="store_true", help="Print detailed progress logs")
     parser.add_argument("--debug", action="store_true", help="Enter debug mode")
     parser.add_argument("--logfile", nargs='?', const="auto", default=None, 
@@ -81,6 +82,7 @@ if __name__ == "__main__":
                          climatology_range=args.climatology_range,
                          stat_var=args.stat_var,
                          parallel_runs=args.parallel_runs,
+                         verify_existing=args.verify_existing,
                          logfile=args.logfile,
                          verbose=args.verbose,
                          debug=args.debug)
