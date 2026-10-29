@@ -35,6 +35,7 @@ def parse_args():
     parser.add_argument("--daterange", type=str, help="Flexible date input: year(s), date(s), or range")
     parser.add_argument("--climatology_range", type=str, help="The year range for the climatology (e.g. 1991,2020)")
     parser.add_argument("--parallel_runs", type=int, default=1, help="The number of stats jobs to run in parallel")
+    parser.add_argument("--verify_existing", action=argparse.BooleanOptionalAction, default=True, help="If false, blindly trusts mtime instead of opening NetCDF files to check attributes (Fast Mode)")
     parser.add_argument("--verbose", action="store_true", help="Print detailed progress logs")
     parser.add_argument("--debug", action="store_true", help="Enter debug mode")
     parser.add_argument("--logfile", nargs='?', const="auto", default=None, 
@@ -68,6 +69,7 @@ if __name__ == "__main__":
                        daterange=args.daterange,
                        climatology_range=args.climatology_range,
                        parallel_runs=args.parallel_runs,
+                       verify_existing=args.verify_existing,
                        logfile=args.logfile,
                        verbose=args.verbose,
                        debug=args.debug)

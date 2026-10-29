@@ -47,7 +47,6 @@ def parse_args():
     parser.add_argument("--run_globcolour", action="store_true", help="Run the GlobColour Preprocessing pipeline")
     parser.add_argument("--run_extract", action="store_true", help="Run the Regional Data Extraction pipeline")
 
-    
     # 🎯 Pipeline Specific Arguments
     parser.add_argument("--sst_dataset", type=str, help="SST dataset required for PSC and PP (e.g., CORALSST, ACSPO)")
     parser.add_argument("--par_dataset", type=str, help="PAR dataset required for PP (e.g., GLOBCOLOUR)")
@@ -68,6 +67,7 @@ def parse_args():
     # 🎯 File Handling
     parser.add_argument("--overwrite", action="store_true", help="Overwrite existing outputs")
     parser.add_argument("--delete_corrupt", action="store_true", help="Delete identified corrupt source files")
+    parser.add_argument("--verify_existing", action=argparse.BooleanOptionalAction, default=True, help="If false, engages Fast Mode for Stats/Anomalies by trusting mtime.")
     
     # 🎯 Hardware and Logging
     parser.add_argument("--parallel_runs", type=int, default=4, help="Number of parallel workers for Stats/Anomalies (default: 4)")
@@ -146,7 +146,7 @@ if __name__ == "__main__":
         if args.map_subset: cmd.extend(["--map_subset", args.map_subset])
         if args.stat_prods: cmd.extend(["--prods"] + args.stat_prods)
         if args.stat_periods: cmd.extend(["--periods"] + args.stat_periods)
-        
+        if not args.verify_existing: cmd.append("--no-verify_existing")
         if args.verbose: cmd.append("--verbose")
         if args.logfile: cmd.extend(["--logfile", "auto"])
             
@@ -165,7 +165,7 @@ if __name__ == "__main__":
         if args.map_subset: cmd.extend(["--map_subset", args.map_subset])
         if args.anom_prods: cmd.extend(["--prods"] + args.anom_prods)
         if args.anom_periods: cmd.extend(["--periods"] + args.anom_periods)
-        
+        if not args.verify_existing: cmd.append("--no-verify_existing")
         if args.verbose: cmd.append("--verbose")
         if args.logfile: cmd.extend(["--logfile", "auto"])
             
