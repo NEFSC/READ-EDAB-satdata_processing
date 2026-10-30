@@ -34,3 +34,5 @@ dependencies:
   - pip:
       - gsutil
       - resource
+      - git+https://github.com/NEFSC/READ-EDAB-Utilities-py.git
+      - git+https://github.com/NEFSC/READ-EDAB-satdata_processing.git

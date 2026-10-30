@@ -1,17 +1,11 @@
 # run_pp.py
 import argparse
 import sys
+import multiprocessing
 from pathlib import Path
 import ast
 
-# Add project root to sys.path
-project_root = Path(__file__).resolve().parent.parent.parent.parent
-sys.path.insert(0, str(project_root))
-
-from utilities.bootstrap.environment import bootstrap_environment
-env = bootstrap_environment(verbose=False)
-
-from utilities.src.utilities.calc_primprod import run_pp_pipeline
+from utilities import run_pp_pipeline
 
 def flatten_dates(d):
     # Flatten nested lists like [[1997]] → [1997]
@@ -32,6 +26,10 @@ def parse_args():
     parser.add_argument("--par_dataset", type=str, required=False, help="Name of PAR dataset")
     parser.add_argument("--map_subset", type=str, required=False, help="Name of the map region (e.g. NES, NWA) to subset the data to")
     parser.add_argument("--daterange", type=str, help="Flexible date input: year(s), date(s), or range")
+    parser.add_argument("--parallel_runs", type=int, default=1, help="The number of stats jobs to run in parallel")
+    parser.add_argument("--overwrite", action="store_true", help="Overwrite existing outputs")
+    parser.add_argument("--verbose", action="store_true", help="Print detailed progress logs")
+    parser.add_argument("--debug", action="store_true", help="Enter debug mode")
     parser.add_argument("--logfile", nargs='?', const="auto", default=None, 
                         help="Path to log file. Use flag without a path to autogenerate.")
     args = parser.parse_args()
@@ -50,8 +48,25 @@ def parse_args():
     return args
 
 if __name__ == "__main__":
+    # Force multiprocessing to 'spawn' instead of 'fork' to prevent HDF5 core dumps
+    try:
+        multiprocessing.set_start_method('spawn')
+    except RuntimeError:
+        pass  # Catch if it's already been set
+
     args = parse_args()
-    run_pp_pipeline(chl_dataset=args.chl_dataset, sst_dataset=args.sst_dataset, par_dataset=args.par_dataset, map_subset=args.map_subset, daterange=args.daterange, logfile=args.logfile)
+
+    run_pp_pipeline(chl_dataset=args.chl_dataset, 
+                    sst_dataset=args.sst_dataset, 
+                    par_dataset=args.par_dataset, 
+                    map_subset=args.map_subset, 
+                    parallel_runs=args.parallel_runs, 
+                    daterange=args.daterange, 
+                    logfile=args.logfile,
+                    overwrite=args.overwrite,
+                    verbose=args.verbose,
+                    debug=args.debug
+                )
 
     # Example terminal window command
     # python3 run_pp_pipeline.py --sst_dataset CORALSST --daterange 1998

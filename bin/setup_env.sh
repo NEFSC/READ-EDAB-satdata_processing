@@ -12,11 +12,13 @@ while getopts "n:f:oh" opt; do
     n) ENV_NAME="$OPTARG" ;;
     f) YML_PATH="$OPTARG" ;;
     o) OVERWRITE=true ;;
+    u) UPGRADE_UTILS=true ;;
     h) 
       echo "Usage: $0 [-n env_name] [-f yml_path] [-o]"
       echo "  -n  Name of the Conda environment (default: satprocessing)"
       echo "  -f  Path to the environment YAML file (default: ./satprocessing.yml)"
       echo "  -o  Overwrite: completely remove the existing environment and start fresh"
+      echo "  -u  Update the github packages (default: True)"
       exit 0 
       ;;
     *) 
@@ -75,6 +77,12 @@ else
         echo "❌ ERROR: Conda failed to resolve or download packages. Setup is incomplete."
         exit 1
     fi
+fi
+
+# Check to see if there are github package updates
+if [ "$UPGRADE_UTILS" = true ]; then
+    echo "🚀 Force-upgrading utilities package from GitHub..."
+    conda run -n "$ENV_NAME" pip install --upgrade --force-reinstall git+https://github.com/NEFSC/READ-EDAB-Utilities-py.git
 fi
 
 # 6. Safely test the environment without activating the shell

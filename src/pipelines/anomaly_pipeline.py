@@ -4,15 +4,7 @@ import sys
 from pathlib import Path
 import ast
 
-# Add project root to sys.path
-project_root = Path(__file__).resolve().parent.parent.parent.parent
-print(f"Project Root = {project_root}")
-sys.path.insert(0, str(project_root))
-
-from utilities.bootstrap.environment import bootstrap_environment
-env = bootstrap_environment(verbose=False)
-
-from utilities.src.utilities.anomaly_utilities import run_anomaly_pipeline
+from utilities import run_anomaly_pipeline
 
 def flatten_dates(d):
     # Flatten nested lists like [[1997]] → [1997]

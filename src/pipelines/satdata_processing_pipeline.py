@@ -5,13 +5,6 @@ import subprocess
 from pathlib import Path
 from datetime import datetime
 
-# Add project root to sys.path
-project_root = Path(__file__).resolve().parent.parent.parent.parent
-sys.path.insert(0, str(project_root))
-
-from utilities.bootstrap.environment import bootstrap_environment
-env = bootstrap_environment(verbose=False)
-
 def run_command(cmd, step_name):
     """
     Executes a shell command via subprocess and checks for errors.
@@ -103,7 +96,7 @@ if __name__ == "__main__":
     # ==========================================
     if args.run_psc:
         cmd = [
-            python_exe, str(script_dir / "psc_pp_parallel_pipeline.py"),
+            python_exe, str(script_dir / "psc_pipeline.py"),
             "--pipeline", "psc",
             "--chl_dataset", args.dataset,
             "--batch_size", str(args.parallel_runs)
@@ -120,10 +113,10 @@ if __name__ == "__main__":
     # ==========================================
     if args.run_pp:
         cmd = [
-            python_exe, str(script_dir / "psc_pp_parallel_pipeline.py"),
+            python_exe, str(script_dir / "pp_pipeline.py"),
             "--pipeline", "pp",
             "--chl_dataset", args.dataset,
-            "--batch_size", str(args.parallel_runs)
+            "--parallel_runs", str(args.parallel_runs)
         ]
         if args.map_subset: cmd.extend(["--map_subset", args.map_subset])
         if args.sst_dataset: cmd.extend(["--sst_dataset", args.sst_dataset])

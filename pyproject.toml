@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pipelines"
+version = "0.1.0"
+description = "A collection of headless pythong functions to execute satellite data processing for NOAA NEFSC EDAB."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+  { name = "Kimberly Hyde", email = "kimberly.hyde@noaa.gov" }
+]
+
+dependencies = [
+    "xarray",
+    "geopandas",
+    "numpy",
+    "h5netcdf",
+    "dask",
+    "pyproj",
+    "joblib",
+    "netCDF4",
+    "python-dateutil",
+    "matplotlib",
+    "cartopy",
+    "xesmf",
+    "esmpy"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/NEFSC/READ-EDAB-satdata_processing"
+"Bug Tracker" = "https://github.com/NEFSC/READ-EDAB-satdata_processing/issues"
+
+# Centralized configuration for development tools
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
