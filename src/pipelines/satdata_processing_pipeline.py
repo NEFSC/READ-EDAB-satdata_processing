@@ -97,7 +97,6 @@ if __name__ == "__main__":
     if args.run_psc:
         cmd = [
             python_exe, str(script_dir / "psc_pipeline.py"),
-            "--pipeline", "psc",
             "--chl_dataset", args.dataset,
             "--batch_size", str(args.parallel_runs)
         ]
@@ -114,7 +113,6 @@ if __name__ == "__main__":
     if args.run_pp:
         cmd = [
             python_exe, str(script_dir / "pp_pipeline.py"),
-            "--pipeline", "pp",
             "--chl_dataset", args.dataset,
             "--parallel_runs", str(args.parallel_runs)
         ]
