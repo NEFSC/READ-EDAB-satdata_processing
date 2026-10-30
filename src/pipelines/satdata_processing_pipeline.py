@@ -56,7 +56,7 @@ def parse_args():
     parser.add_argument("--extract_periods", type=str, nargs='+', default=None, help="Periods for Extraction")
     parser.add_argument("--extract_shapefile", type=str, default=None, help="Shapefile name to extract")
     parser.add_argument("--extract_stat_type", type=str, default=None, help="Target statistic type (e.g., mean, median)")
-    parser.add_argument("--extract_data_type", type=str, default=None, help="Target data type (e.g., STATS, ANOM)")
+    parser.add_argument("--extract_data_type", type=str, nargs='+', default=None, help="Target data type (e.g., STATS, ANOM)")
    
     # 🎯 File Handling
     parser.add_argument("--overwrite", action="store_true", help="Overwrite existing outputs")
