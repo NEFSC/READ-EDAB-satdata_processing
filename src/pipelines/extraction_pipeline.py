@@ -25,6 +25,7 @@ def parse_args():
     
     # Analytical Targets
     parser.add_argument("--stat_type", type=str, default=None, help="The target statistic (e.g., mean, median, max)")
+    parser.add_argument("--data_type", type=str, nargs='+', default=["STATS"], help="The type of data to extract (e.g., STATS, ANOM). Defaults to STATS.")
     
     # File Handling & Logging
     parser.add_argument("--overwrite", action="store_true", help="Overwrite existing output data")
@@ -60,6 +61,7 @@ if __name__ == "__main__":
     shapefile = kwargs.pop('shapefile')
     bbox = kwargs.pop('bbox')
     stat_type = kwargs.pop('stat_type')
+    data_type = kwargs.pop('data_type')
     
     try:
         run_extraction_pipeline(
@@ -67,7 +69,8 @@ if __name__ == "__main__":
             periods=periods, 
             shapefile=shapefile, 
             bbox=bbox, 
-            stat_type=stat_type, 
+            stat_type=stat_type,
+            data_type=data_type, 
             **kwargs
         )
     except Exception as e:
