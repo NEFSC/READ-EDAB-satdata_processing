@@ -1,9 +1,13 @@
 #!/bin/bash
 set -e # Exit immediately if any command fails
 
+# Get the absolute path to the directory where this script lives (/bin)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 # 1. Set default values
 ENV_NAME="satprocessing"
-YML_PATH="./satprocessing.yml"
+# Point to the root directory (one level up from /bin)
+YML_PATH="$SCRIPT_DIR/../satprocessing.yml"
 OVERWRITE=false
 
 # 2. Parse command-line flags (-n for name, -f for file, -h for help)
