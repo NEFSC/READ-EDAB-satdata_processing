@@ -35,4 +35,4 @@ htmlcov/
 
 # Secrets
 .env
-
+*assets.yaml

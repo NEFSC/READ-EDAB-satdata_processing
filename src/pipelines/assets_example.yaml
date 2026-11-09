@@ -1,0 +1,14 @@
+# assets_example.yaml
+packages:
+  resources:
+    # local_path: ""  # Uncomment and set a local folder path to install locally in editable mode
+    github_url: "https://github.com/ORGANIZATION/REPO_NAME/archive/refs/heads/main.zip"
+  utilities:
+    # local_path: ""
+    github_url: "https://github.com/ORGANIZATION/REPO_NAME/archive/refs/heads/main.zip"
+
+path_config:
+  project_root: "C:\\Path\\To\\Your\\Project_Root"
+  resources: "X:\\"
+  datasets: "V:\\"
+  projects: "Y:\\"
