@@ -44,7 +44,7 @@ def parse_args():
     # 🎯 Primary Configuration
     parser.add_argument("--dataset", type=str, required=True, help="Main dataset to process (e.g., OCCCI, GLOBCOLOUR, ACSPO)")
     parser.add_argument("--map_subset", type=str, default=None, help="Subset region (default: NWA)")
-    parser.add_argument("--daterange", type=str, help="Flexible date input: year(s), date(s), or range")
+    parser.add_argument("--daterange", type=str, help="Flexible date input. Examples: '2025', \"['2025', '2026']\", \"['20250101', '20250131']\"")
     
     # 🎯 Execution Steps (Toggle which pipelines to run)
     parser.add_argument("--run_psc", action="store_true", help="Run the Phytoplankton Size Class pipeline")
@@ -127,9 +127,7 @@ if __name__ == "__main__":
         ]
         if args.map_subset: cmd.extend(["--map_subset", args.map_subset])
         if args.sst_dataset: cmd.extend(["--sst_dataset", args.sst_dataset])
-        if args.daterange: 
-            cmd.append("--daterange")
-            cmd.extend(args.daterange)
+        if args.daterange: cmd.extend(["--daterange", str(args.daterange)])
         if args.verbose: cmd.append("--verbose")
         if args.logfile: cmd.extend(["--logfile", "auto"])
             
@@ -147,9 +145,7 @@ if __name__ == "__main__":
         if args.map_subset: cmd.extend(["--map_subset", args.map_subset])
         if args.sst_dataset: cmd.extend(["--sst_dataset", args.sst_dataset])
         if args.par_dataset: cmd.extend(["--par_dataset", args.par_dataset])
-        if args.daterange: 
-            cmd.append("--daterange")
-            cmd.extend(args.daterange)
+        if args.daterange: cmd.extend(["--daterange", str(args.daterange)])
         if args.verbose: cmd.append("--verbose")
         if args.logfile: cmd.extend(["--logfile", "auto"])
             
