@@ -2,6 +2,7 @@
 import argparse
 import sys
 import subprocess
+import ast
 from pathlib import Path
 from datetime import datetime
 
@@ -25,12 +26,25 @@ def run_command(cmd, step_name):
         
     print(f"\n✅ PROCESSING STEP COMPLETED: {step_name.upper()}\n")
 
+def flatten_dates(d):
+    # Flatten nested lists like [[1997]] → [1997]
+    if isinstance(d, list):
+        flat = []
+        for item in d:
+            if isinstance(item, list):
+                flat.extend(flatten_dates(item))
+            else:
+                flat.append(item)
+        return flat
+    return [d]
+
 def parse_args():
     parser = argparse.ArgumentParser(description="Processing Execution Script for SatProcessing Pipelines")
     
     # 🎯 Primary Configuration
     parser.add_argument("--dataset", type=str, required=True, help="Main dataset to process (e.g., OCCCI, GLOBCOLOUR, ACSPO)")
     parser.add_argument("--map_subset", type=str, default=None, help="Subset region (default: NWA)")
+    parser.add_argument("--daterange", type=str, help="Flexible date input: year(s), date(s), or range")
     
     # 🎯 Execution Steps (Toggle which pipelines to run)
     parser.add_argument("--run_psc", action="store_true", help="Run the Phytoplankton Size Class pipeline")
@@ -68,7 +82,17 @@ def parse_args():
     parser.add_argument("--verbose", action="store_true", help="Enable verbose logging")
     parser.add_argument("--logfile", nargs='?', const="auto", default=None, help="Generate logfiles for all executed steps")
 
-    return parser.parse_args()
+    args = parser.parse_args()
+
+    # Evaluate daterange using AST
+    if args.daterange:
+        try:
+            parsed = ast.literal_eval(args.daterange)
+            args.daterange = flatten_dates(parsed)
+        except Exception:
+            args.daterange = [args.daterange]
+
+    return args
 
 if __name__ == "__main__":
 # Force multiprocessing to 'spawn' instead of 'fork' to prevent HDF5 core dumps
@@ -103,6 +127,9 @@ if __name__ == "__main__":
         ]
         if args.map_subset: cmd.extend(["--map_subset", args.map_subset])
         if args.sst_dataset: cmd.extend(["--sst_dataset", args.sst_dataset])
+        if args.daterange: 
+            cmd.append("--daterange")
+            cmd.extend(args.daterange)
         if args.verbose: cmd.append("--verbose")
         if args.logfile: cmd.extend(["--logfile", "auto"])
             
@@ -120,6 +147,9 @@ if __name__ == "__main__":
         if args.map_subset: cmd.extend(["--map_subset", args.map_subset])
         if args.sst_dataset: cmd.extend(["--sst_dataset", args.sst_dataset])
         if args.par_dataset: cmd.extend(["--par_dataset", args.par_dataset])
+        if args.daterange: 
+            cmd.append("--daterange")
+            cmd.extend(args.daterange)
         if args.verbose: cmd.append("--verbose")
         if args.logfile: cmd.extend(["--logfile", "auto"])
             
