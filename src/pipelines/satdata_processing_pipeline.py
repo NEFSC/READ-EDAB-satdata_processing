@@ -17,7 +17,7 @@ def run_command(cmd, step_name):
     print(f"{'='*80}\n")
     
     # Run the process and stream output directly to the terminal
-    result = subprocess.run(cmd)
+    result = subprocess.run(safe_cmd)
     
     if result.returncode != 0:
         print(f"\n❌ CRITICAL FAILURE IN STEP: {step_name.upper()}")
