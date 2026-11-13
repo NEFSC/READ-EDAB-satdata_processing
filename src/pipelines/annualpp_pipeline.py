@@ -6,8 +6,7 @@ from datetime import datetime
 from utilities import run_annual_pp_pipeline 
 
 def main():
-    parser = argparse.add_argument_group('Annual Primary Productivity Parameters')
-    parser = argparse.ArgumentParser(description="Run the Annual Primary Productivity Calculation pipeline.")
+    parser = argparse.ArgumentParser(description="Run the Annual Primary Productivity pipeline.")
     
     parser.add_argument("--dataset", type=str, required=True, help="Base dataset (e.g., OCCCI, GLOBCOLOUR)")
     parser.add_argument("--map_subset", type=str, help="Regional subset (e.g., NWA, NES, GLOBAL)")
