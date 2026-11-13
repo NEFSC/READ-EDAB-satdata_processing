@@ -53,6 +53,7 @@ def parse_args():
     parser.add_argument("--run_anom", action="store_true", help="Run the Anomaly pipeline")
     parser.add_argument("--run_globcolour", action="store_true", help="Run the GlobColour Preprocessing pipeline")
     parser.add_argument("--run_extract", action="store_true", help="Run the Regional Data Extraction pipeline")
+    parser.add_argument("--run_annual_pp", action="store_true", help="Run the Annual Primary Productivity Calculation pipeline")
 
     # 🎯 Pipeline Specific Arguments
     parser.add_argument("--sst_dataset", type=str, help="SST dataset required for PSC and PP (e.g., CORALSST, ACSPO)")
@@ -234,6 +235,34 @@ if __name__ == "__main__":
             if args.logfile: cmd.extend(["--logfile", "auto"])
                 
             run_command(cmd, "Data Extraction")
+
+    # ==============================================================================
+    # 7. ANNUAL PRIMARY PRODUCTIVITY (ANNUAL PP)
+    # ==============================================================================
+    if args.run_annual_pp:
+        print(f"\n{'='*80}\n🚀 STARTING PROCESSING STEP: ANNUAL PRIMARY PRODUCTIVITY at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        
+        annualpp_script = os.path.join(pipelines_dir, "annualpp_pipeline.py")
+        cmd = [sys.executable, annualpp_script, "--dataset", args.dataset]
+        
+        if args.map_subset: cmd.extend(["--map_subset", args.map_subset])
+        if args.parallel_runs: cmd.extend(["--parallel_runs", str(args.parallel_runs)])
+        if args.overwrite: cmd.append("--overwrite")
+        if args.verbose: cmd.append("--verbose")
+        if args.debug: cmd.append("--debug")
+        if args.logfile: cmd.extend(["--logfile", "auto" if args.logfile is True else args.logfile])
+        
+        # Safely cast the list back to a string for the downstream parser
+        if args.daterange: 
+            cmd.extend(["--daterange", str(args.daterange)])
+
+        print(f"💻 Command: {' '.join(cmd)}\n{'='*80}\n")
+        
+        try:
+            subprocess.run(cmd, check=True)
+        except subprocess.CalledProcessError:
+            print(f"\n❌ Pipeline failed during ANNUAL PRIMARY PRODUCTIVITY step. Halting execution.")
+            sys.exit(1)
 
     print(f"{'*'*80}")
     print(f"🎉 ALL REQUESTED PROCESSING PIPELINE STEPS COMPLETED SUCCESSFULLY!")
