@@ -109,8 +109,8 @@ if __name__ == "__main__":
     script_dir = Path(__file__).resolve().parent
 
     # Ensure at least one step was selected 
-    if not any([args.run_globcolour, args.run_psc, args.run_pp, args.run_stats, args.run_anom, args.run_extract]):
-        print("⚠️ No execution steps selected! Use --run_globcolour, --run_psc, --run_pp, --run_stats, --run_anom, and/or --run_extract.")
+    if not any([args.run_globcolour, args.run_psc, args.run_pp, args.run_stats, args.run_anom, args.run_extract, args.run_annual_pp]):
+        print("⚠️ No execution steps selected! Use --run_globcolour, --run_psc, --run_pp, --run_stats, --run_anom, --run_extract and/or --run_annual_pp.")
         sys.exit(1)
 
     print(f"\n{'*'*80}")
