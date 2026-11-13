@@ -251,7 +251,6 @@ if __name__ == "__main__":
         if args.parallel_runs: cmd.extend(["--parallel_runs", str(args.parallel_runs)])
         if args.overwrite: cmd.append("--overwrite")
         if args.verbose: cmd.append("--verbose")
-        if args.debug: cmd.append("--debug")
         if args.logfile: cmd.extend(["--logfile", "auto" if args.logfile is True else args.logfile])
         
         # Safely cast the list back to a string for the downstream parser
