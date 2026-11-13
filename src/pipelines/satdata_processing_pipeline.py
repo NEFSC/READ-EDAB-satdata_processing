@@ -240,11 +240,13 @@ if __name__ == "__main__":
     # 7. ANNUAL PRIMARY PRODUCTIVITY (ANNUAL PP)
     # ==============================================================================
     if args.run_annual_pp:
-        print(f"\n{'='*80}\n🚀 STARTING PROCESSING STEP: ANNUAL PRIMARY PRODUCTIVITY at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-        
-        annualpp_script = os.path.join(pipelines_dir, "annualpp_pipeline.py")
-        cmd = [sys.executable, annualpp_script, "--dataset", args.dataset]
-        
+    
+        cmd = [
+            python_exe, str(script_dir / "annualpp_pipeline.py"),
+            "--dataset", args.dataset,
+            "--parallel_runs", str(args.parallel_runs)
+        ]
+    
         if args.map_subset: cmd.extend(["--map_subset", args.map_subset])
         if args.parallel_runs: cmd.extend(["--parallel_runs", str(args.parallel_runs)])
         if args.overwrite: cmd.append("--overwrite")
